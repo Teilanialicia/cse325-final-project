@@ -1,0 +1,70 @@
+@page "/courses"
+@using Microsoft.EntityFrameworkCore
+@using FocusFlowStarter.Models
+@inject AppDbContext Db
+
+<PageTitle>Courses</PageTitle>
+
+<h1>Course Management</h1>
+
+<div class="form-section">
+    <input placeholder="Course Name" @bind="newCourse.Name" />
+    <button @onclick="AddCourse">Add Course</button>
+</div>
+
+<div class="list-section">
+    @foreach (var course in courses)
+    {
+        <div class="card-item">
+            <span>@course.Name</span>
+
+            <button class="delete-btn"
+                    @onclick="() => DeleteCourse(course.Id)">
+                Delete
+            </button>
+        </div>
+    }
+</div>
+
+@code {
+
+    private List<Course> courses = new();
+
+    private Course newCourse = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        courses = await Db.Courses.ToListAsync();
+    }
+
+    private async Task AddCourse()
+    {
+        if (!string.IsNullOrWhiteSpace(newCourse.Name))
+        {
+            Db.Courses.Add(new Course
+            {
+                Name = newCourse.Name
+            });
+
+            await Db.SaveChangesAsync();
+
+            courses = await Db.Courses.ToListAsync();
+
+            newCourse = new Course();
+        }
+    }
+
+    private async Task DeleteCourse(int id)
+    {
+        var course = await Db.Courses.FindAsync(id);
+
+        if (course != null)
+        {
+            Db.Courses.Remove(course);
+
+            await Db.SaveChangesAsync();
+
+            courses = await Db.Courses.ToListAsync();
+        }
+    }
+}

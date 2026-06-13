@@ -1,0 +1,125 @@
+@page "/tasks"
+@using Microsoft.EntityFrameworkCore
+@using FocusFlowStarter.Models
+@inject AppDbContext Db
+
+<PageTitle>Tasks</PageTitle>
+
+<h1>Task Management</h1>
+
+<div class="form-section">
+
+    <input placeholder="Task Name" @bind="newTask.Title" />
+
+    <input type="date" @bind="newTask.DueDate" />
+
+    <select @bind="newTask.Priority">
+        <option>Low</option>
+        <option>Medium</option>
+        <option>High</option>
+    </select>
+
+    <button @onclick="AddTask">
+        Add Task
+    </button>
+
+</div>
+
+<div class="list-section">
+
+    @foreach (var task in tasks)
+    {
+        <div class="card-item">
+
+            <div>
+                <strong>@task.Title</strong><br />
+
+                Due:
+                @task.DueDate.ToShortDateString()
+
+                |
+
+                Priority:
+                @task.Priority
+            </div>
+
+            <div>
+                <input type="checkbox" checked="@task.IsCompleted"
+                       @onchange="async (e) => await HandleCheckboxChange(e, task)" />
+
+                <button class="delete-btn" @onclick="() => DeleteTask(task.Id)">
+                    Delete
+                </button>
+            </div>
+
+        </div>
+    }
+
+</div>
+
+@code {
+
+    private List<StudentTask> tasks = new();
+
+    private StudentTask newTask = new()
+    {
+        DueDate = DateTime.UtcNow
+    };
+
+    protected override async Task OnInitializedAsync()
+    {
+        tasks = await Db.StudentTasks.ToListAsync();
+    }
+
+    private async Task HandleCheckboxChange(
+    ChangeEventArgs e,
+    StudentTask task)
+    {
+        task.IsCompleted = (bool)e.Value!;
+
+        Db.StudentTasks.Update(task);
+
+        await Db.SaveChangesAsync();
+    }
+
+    private async Task AddTask()
+    {
+        if (!string.IsNullOrWhiteSpace(newTask.Title))
+        {
+            newTask.DueDate = DateTime.SpecifyKind(
+                newTask.DueDate,
+                DateTimeKind.Utc);
+
+            Db.StudentTasks.Add(new StudentTask
+            {
+                Title = newTask.Title,
+                DueDate = newTask.DueDate,
+                Priority = newTask.Priority,
+                IsCompleted = false
+            });
+
+            await Db.SaveChangesAsync();
+        }
+    }
+
+    private async Task UpdateTask(StudentTask task)
+    {
+        Db.StudentTasks.Update(task);
+
+        await Db.SaveChangesAsync();
+    }
+
+    private async Task DeleteTask(int id)
+    {
+        var task = await Db.StudentTasks.FindAsync(id);
+
+        if (task != null)
+        {
+            Db.StudentTasks.Remove(task);
+
+            await Db.SaveChangesAsync();
+
+            tasks = await Db.StudentTasks.ToListAsync();
+        }
+    }
+}

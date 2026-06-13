@@ -1,0 +1,35 @@
+
+@page "/pomodoro"
+
+<PageTitle>Pomodoro Timer</PageTitle>
+
+<h1>Pomodoro Timer</h1>
+
+<div class="timer-card">
+    <h2>@minutes:@seconds</h2>
+
+    <button @onclick="StartTimer">Start</button>
+    <button @onclick="ResetTimer">Reset</button>
+</div>
+
+@code {
+    private int totalSeconds = 1500;
+
+    private string minutes => (totalSeconds / 60).ToString("00");
+    private string seconds => (totalSeconds % 60).ToString("00");
+
+    private async Task StartTimer()
+    {
+        while (totalSeconds > 0)
+        {
+            await Task.Delay(1000);
+            totalSeconds--;
+            StateHasChanged();
+        }
+    }
+
+    private void ResetTimer()
+    {
+        totalSeconds = 1500;
+    }
+}

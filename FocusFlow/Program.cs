@@ -1,4 +1,7 @@
 using FocusFlow.Components;
+using FocusFlowStarter.Data;
+using FocusFlowStarter.Models;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,7 +9,20 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
+builder.Services.AddDbContextFactory<AppDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var dbFactory = scope.ServiceProvider
+        .GetRequiredService<IDbContextFactory<AppDbContext>>();
+
+    using var db = dbFactory.CreateDbContext();
+
+    await SeedData.InitializeAsync(db);
+}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
