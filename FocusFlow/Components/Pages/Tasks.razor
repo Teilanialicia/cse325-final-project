@@ -1,60 +1,47 @@
 @page "/tasks"
+@using FocusFlow.Models
 @using Microsoft.EntityFrameworkCore
-@using FocusFlowStarter.Models
 @inject AppDbContext Db
 
-<PageTitle>Tasks</PageTitle>
-
-<h1>Task Management</h1>
-
-<div class="form-section">
-
-    <input placeholder="Task Name" @bind="newTask.Title" />
-
-    <input type="date" @bind="newTask.DueDate" />
-
-    <select @bind="newTask.Priority">
-        <option>Low</option>
-        <option>Medium</option>
-        <option>High</option>
-    </select>
-
-    <button @onclick="AddTask">
-        Add Task
-    </button>
-
+<h1 class="page-title">Task Management</h1>
+<div class="panel">
+    <div class="form-section">
+        <input class="input" placeholder="Task Name" @bind="newTask.Title" />
+        <input class="input" type="date" @bind="newTask.DueDate" />
+        <select class="input" @bind="newTask.Priority">
+            <option>Low</option>
+            <option>Medium</option>
+            <option>High</option>
+        </select>
+        <button class="btn-primary" @onclick="AddTask">
+            + Add Task
+        </button>
+    </div>
 </div>
-
 <div class="list-section">
-
     @foreach (var task in tasks)
     {
-        <div class="card-item">
-
-            <div>
-                <strong>@task.Title</strong><br />
-
-                Due:
-                @task.DueDate.ToShortDateString()
-
-                |
-
-                Priority:
-                @task.Priority
+        <div class="card-item @(task.IsCompleted ? "completed" : "")">
+            <div class="card-main">
+                <strong>@task.Title</strong>
+                <div class="meta">
+                    <span>@task.DueDate.ToShortDateString()</span>
+                    <span class="priority @task.Priority.ToLower()">
+                        @task.Priority
+                    </span>
+                </div>
             </div>
-
-            <div>
-                <input type="checkbox" checked="@task.IsCompleted"
+            <div class="card-actions">
+                <input type="checkbox"
+                       checked="@task.IsCompleted"
                        @onchange="async (e) => await HandleCheckboxChange(e, task)" />
-
-                <button class="delete-btn" @onclick="() => DeleteTask(task.Id)">
+                <button class="delete-btn"
+                        @onclick="() => DeleteTask(task.Id)">
                     Delete
                 </button>
             </div>
-
         </div>
     }
-
 </div>
 
 @code {
@@ -71,9 +58,7 @@
         tasks = await Db.StudentTasks.ToListAsync();
     }
 
-    private async Task HandleCheckboxChange(
-    ChangeEventArgs e,
-    StudentTask task)
+    private async Task HandleCheckboxChange(ChangeEventArgs e, StudentTask task)
     {
         task.IsCompleted = (bool)e.Value!;
 
@@ -99,13 +84,13 @@
             });
 
             await Db.SaveChangesAsync();
+            tasks = await Db.StudentTasks.ToListAsync();
         }
     }
 
     private async Task UpdateTask(StudentTask task)
     {
         Db.StudentTasks.Update(task);
-
         await Db.SaveChangesAsync();
     }
 

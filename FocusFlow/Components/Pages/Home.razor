@@ -1,31 +1,69 @@
-
 @page "/"
+@layout MainLayout
 
 <PageTitle>FocusFlow</PageTitle>
 
-<div class="hero">
-    <h1>FocusFlow</h1>
-    <p>An ADHD-Friendly Student Planner</p>
+<div class="dashboard-container">
+    <div class="hero-section">
+        <h1>Welcome to FocusFlow 🌱</h1>
+        <p class="hero-text">
+            Stay organized, manage your coursework, and build better study habits.
+            Designed to help students reduce overwhelm and stay focused on what matters most.
+        </p>
+        <div class="hero-buttons">
+            <a class="btn btn-primary btn-lg" href="/tasks">
+                View Tasks
+            </a>
 
-    <div class="hero-buttons">
-        <a class="btn-primary" href="/courses">Manage Courses</a>
-        <a class="btn-secondary" href="/tasks">Manage Tasks</a>
-    </div>
-</div>
-
-<div class="features-grid">
-    <div class="feature-card">
-        <h3>Organize Courses</h3>
-        <p>Create courses and keep assignments separated by class.</p>
-    </div>
-
-    <div class="feature-card">
-        <h3>Track Assignments</h3>
-        <p>Manage deadlines, priorities, and completed work.</p>
+            <a class="btn btn-outline-primary btn-lg" href="/courses">
+                Manage Courses
+            </a>
+        </div>
     </div>
 
-    <div class="feature-card">
-        <h3>Stay Focused</h3>
-        <p>Use the built-in Pomodoro timer to improve concentration.</p>
+    <div class="quick-actions">
+        <h2>Quick Actions</h2>
+        <div class="actions-grid">
+            <a href="/tasks" class="action-card">
+                <h3>Tasks</h3>
+                <p>Create, update, and complete assignments.</p>
+            </a>
+
+            <a href="/courses" class="action-card">
+                <h3>Courses</h3>
+                <p>Organize assignments by class.</p>
+            </a>
+
+            <a href="/pomodoro" class="action-card">
+                <h3>Pomodoro</h3>
+                <p>Stay focused with timed study sessions.</p>
+            </a>
+        </div>
+    </div>
+
+    <div class="features-section">
+        <h2>Why FocusFlow?</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <h3>Stay Organized</h3>
+                <p>
+                    Keep all assignments, deadlines, and courses in one place.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <h3>Reduce Overwhelm</h3>
+                <p>
+                    Simple layouts and focused tools designed for students.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <h3>Build Better Habits</h3>
+                <p>
+                    Use Pomodoro sessions and progress tracking to stay consistent.
+                </p>
+            </div>
+        </div>
     </div>
 </div>

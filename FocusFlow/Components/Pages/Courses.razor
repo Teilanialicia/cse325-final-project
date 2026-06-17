@@ -1,27 +1,32 @@
 @page "/courses"
-@using Microsoft.EntityFrameworkCore
-@using FocusFlowStarter.Models
+@layout MainLayout
 @inject AppDbContext Db
 
-<PageTitle>Courses</PageTitle>
-
-<h1>Course Management</h1>
-
-<div class="form-section">
-    <input placeholder="Course Name" @bind="newCourse.Name" />
-    <button @onclick="AddCourse">Add Course</button>
+<h1 class="page-title">Course Management</h1>
+<div class="panel">
+    <div class="form-section">
+        <input class="input"
+               placeholder="Course Name"
+               @bind="newCourse.Name" />
+        <button class="btn-primary" @onclick="AddCourse">
+            + Add Course
+        </button>
+    </div>
 </div>
 
 <div class="list-section">
     @foreach (var course in courses)
     {
         <div class="card-item">
-            <span>@course.Name</span>
-
-            <button class="delete-btn"
-                    @onclick="() => DeleteCourse(course.Id)">
-                Delete
-            </button>
+            <div class="card-main">
+                <strong>@course.Name</strong>
+            </div>
+            <div class="card-actions">
+                <button class="delete-btn"
+                        @onclick="() => DeleteCourse(course.Id)">
+                    Delete
+                </button>
+            </div>
         </div>
     }
 </div>

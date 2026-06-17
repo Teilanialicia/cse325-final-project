@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 
-namespace FocusFlowStarter.Models;
+namespace FocusFlow.Models;
 
 public class AppDbContext : DbContext
 {
@@ -8,4 +8,5 @@ public class AppDbContext : DbContext
 
   public DbSet<Course> Courses => Set<Course>();
   public DbSet<StudentTask> StudentTasks => Set<StudentTask>();
+  public DbSet<AppUser> Users => Set<AppUser>();
 }

@@ -1,0 +1,82 @@
+@page "/register"
+@layout MainLayout
+@rendermode InteractiveServer
+@inject AuthService Auth
+@inject NavigationManager Nav
+
+<PageTitle>Register</PageTitle>
+
+<div class="auth-container">
+
+    <div class="auth-card">
+
+        <h1>Create Your Account 🌱</h1>
+
+        <p class="auth-subtitle">
+            Start organizing your courses, assignments, and study sessions with FocusFlow.
+        </p>
+
+        <div class="mb-3">
+            <label class="form-label">Full Name</label>
+            <input class="form-control" placeholder="Enter your name" @bind="name" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Username</label>
+            <input class="form-control" placeholder="Choose a username" @bind="username" />
+        </div>
+
+        <div class="mb-4">
+            <label class="form-label">Password</label>
+            <input type="password" class="form-control" placeholder="Create a password" @bind="password" />
+        </div>
+
+        <button class="btn btn-primary w-100" @onclick="RegisterUser">
+            Create Account
+        </button>
+
+        @if (!string.IsNullOrEmpty(message))
+        {
+            <div class="alert alert-danger mt-3">
+                @message
+            </div>
+        }
+
+        <div class="text-center mt-4">
+            <p>
+                Already have an account?
+                <a href="/login">Login here</a>
+            </p>
+        </div>
+
+    </div>
+
+</div>
+
+@code {
+
+    private string name = "";
+    private string username = "";
+    private string password = "";
+    private string message = "";
+
+    private async Task RegisterUser()
+    {
+        Console.WriteLine("Running!");
+        if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password)) {
+            message = "Please fill out all fields.";
+            return;
+        }
+
+        bool success = await Auth.RegisterAsync(name, username, password);
+
+        if (success)
+        {
+            Nav.NavigateTo("/login");
+        }
+        else
+        {
+            message = "Username already exists.";
+        }
+    }
+}

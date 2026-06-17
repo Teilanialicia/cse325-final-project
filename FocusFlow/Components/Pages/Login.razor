@@ -1,0 +1,71 @@
+@page "/login"
+@layout MainLayout
+@rendermode InteractiveServer
+@inject ILocalStorageService LocalStorage
+@inject AuthService Auth
+@inject NavigationManager Nav
+
+<PageTitle>Login</PageTitle>
+
+<div class="auth-container">
+
+    <div class="auth-card">
+
+        <h1>Welcome Back 👋</h1>
+
+        <p class="auth-subtitle">
+            Log in to continue managing your courses, assignments, and study sessions.
+        </p>
+
+        <div class="mb-3">
+            <label class="form-label">Username</label>
+            <input class="form-control" placeholder="Enter username" @bind="username" />
+        </div>
+
+        <div class="mb-4">
+            <label class="form-label">Password</label>
+            <input type="password" class="form-control" placeholder="Enter password" @bind="password" />
+        </div>
+
+        <button class="btn btn-primary w-100" @onclick="LoginUser">
+            Login
+        </button>
+
+        @if (!string.IsNullOrEmpty(message))
+        {
+            <div class="alert alert-danger mt-3">
+                @message
+            </div>
+        }
+
+        <div class="text-center mt-4">
+            <p>
+                Don't have an account?
+                <a href="/register">Register here</a>
+            </p>
+        </div>
+
+    </div>
+
+</div>
+
+@code {
+
+    private string username = "";
+    private string password = "";
+
+    private string message = "";
+
+    private async Task LoginUser()
+    {
+        bool success = await Auth.LoginAsync(username, password);
+        if (success)
+        {
+            Nav.NavigateTo("/");
+        }
+        else
+        {
+            message = "Invalid username or password.";
+        }
+    }
+}

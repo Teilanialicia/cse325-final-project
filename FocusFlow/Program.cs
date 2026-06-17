@@ -1,7 +1,10 @@
 using FocusFlow.Components;
-using FocusFlowStarter.Data;
-using FocusFlowStarter.Models;
+using FocusFlow.Data;
+using FocusFlow.Models;
+using FocusFlow.Services;
+using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.JSInterop;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +14,10 @@ builder.Services.AddRazorComponents()
 
 builder.Services.AddDbContextFactory<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped<AuthService>();
+builder.Services.AddLocalStorageServices();
+builder.Services.AddScoped<ProtectedLocalStorage>();
 
 var app = builder.Build();
 

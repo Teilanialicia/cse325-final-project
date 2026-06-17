@@ -1,35 +1,88 @@
-
 @page "/pomodoro"
+@layout MainLayout
 
 <PageTitle>Pomodoro Timer</PageTitle>
 
-<h1>Pomodoro Timer</h1>
-
-<div class="timer-card">
-    <h2>@minutes:@seconds</h2>
-
-    <button @onclick="StartTimer">Start</button>
-    <button @onclick="ResetTimer">Reset</button>
+<div class="pomodoro-page">
+    <h1 class="page-title">Focus Timer</h1>
+    <div class="timer-card @(isRunning ? "running" : "")">
+        <div class="timer-display">
+            @minutes:@seconds
+        </div>
+        <div class="timer-label">
+            @if (isRunning)
+            {
+                <span>Stay focused 🌿</span>
+            }
+            else
+            {
+                <span>Ready when you are</span>
+            }
+        </div>
+        <div class="timer-actions">
+            @if (!isRunning)
+            {
+                <button class="btn-primary" @onclick="StartTimer">
+                    Start
+                </button>
+            }
+            else
+            {
+                <button class="btn-secondary" @onclick="PauseTimer">
+                    Pause
+                </button>
+            }
+            <button class="btn-ghost" @onclick="ResetTimer">
+                Reset
+            </button>
+        </div>
+    </div>
 </div>
 
 @code {
     private int totalSeconds = 1500;
+    private bool isRunning = false;
+
+    private CancellationTokenSource? _cts;
 
     private string minutes => (totalSeconds / 60).ToString("00");
     private string seconds => (totalSeconds % 60).ToString("00");
 
     private async Task StartTimer()
     {
-        while (totalSeconds > 0)
+        if (isRunning) return;
+
+        isRunning = true;
+        _cts = new CancellationTokenSource();
+
+        try
         {
-            await Task.Delay(1000);
-            totalSeconds--;
-            StateHasChanged();
+            while (totalSeconds > 0 && !_cts.Token.IsCancellationRequested)
+            {
+                await Task.Delay(1000, _cts.Token);
+                totalSeconds--;
+                StateHasChanged();
+            }
+
+            isRunning = false;
         }
+        catch (TaskCanceledException)
+        {
+            // paused
+        }
+    }
+
+    private void PauseTimer()
+    {
+        isRunning = false;
+        _cts?.Cancel();
     }
 
     private void ResetTimer()
     {
+        _cts?.Cancel();
+
         totalSeconds = 1500;
+        isRunning = false;
     }
 }

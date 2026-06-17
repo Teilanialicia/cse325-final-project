@@ -1,6 +1,6 @@
-using FocusFlowStarter.Models;
+using FocusFlow.Models;
 
-namespace FocusFlowStarter.Data;
+namespace FocusFlow.Data;
 
 public static class SeedData
 {

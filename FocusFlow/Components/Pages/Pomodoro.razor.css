@@ -1,0 +1,114 @@
+.pomodoro-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    padding-top: 3rem;
+}
+
+.timer-card {
+    margin-top: 2rem;
+
+    width: 360px;
+    padding: 2.5rem 2rem;
+
+    background: white;
+    border-radius: 18px;
+
+    border: 1px solid #e2e8f0;
+
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    gap: 1rem;
+
+    transition: all .3s ease;
+}
+
+/* subtle pulse when running */
+.timer-card.running {
+    box-shadow: 0 0 0 6px rgba(79, 70, 229, 0.08),
+                0 10px 30px rgba(15, 23, 42, 0.10);
+}
+
+.timer-display {
+    font-size: 3.5rem;
+    font-weight: 800;
+
+    color: #0f172a;
+
+    letter-spacing: -0.04em;
+}
+
+.timer-label {
+    font-size: .95rem;
+    color: #64748b;
+}
+
+.timer-actions {
+    display: flex;
+    gap: .75rem;
+    margin-top: .5rem;
+}
+
+.btn-primary {
+    background: #4F46E5;
+    color: white;
+
+    border: none;
+    padding: .65rem 1rem;
+    border-radius: 10px;
+
+    font-weight: 600;
+    cursor: pointer;
+
+    transition: all .15s ease;
+}
+
+.btn-primary:hover {
+    background: #4338CA;
+    transform: translateY(-1px);
+}
+
+/* pause button */
+.btn-secondary {
+    background: #e0e7ff;
+    color: #3730a3;
+
+    border: none;
+    padding: .65rem 1rem;
+    border-radius: 10px;
+
+    font-weight: 600;
+    cursor: pointer;
+
+    transition: all .15s ease;
+}
+
+.btn-secondary:hover {
+    background: #c7d2fe;
+}
+
+/* reset button */
+.btn-ghost {
+    background: transparent;
+    color: #64748b;
+
+    border: 1px solid #e2e8f0;
+
+    padding: .65rem 1rem;
+    border-radius: 10px;
+
+    font-weight: 600;
+    cursor: pointer;
+
+    transition: all .15s ease;
+}
+
+.btn-ghost:hover {
+    background: #f8fafc;
+    color: #0f172a;
+}

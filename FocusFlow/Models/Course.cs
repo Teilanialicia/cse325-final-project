@@ -1,5 +1,5 @@
 
-namespace FocusFlowStarter.Models;
+namespace FocusFlow.Models;
 
 public class Course
 {
