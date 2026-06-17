@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="Blazor.LocalStorage" Version="10.0.0" />
+    <PackageReference Include="DotNetEnv" Version="3.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.9">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>

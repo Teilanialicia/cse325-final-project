@@ -1,18 +1,26 @@
-﻿@using FocusFlow.Services
-@inject AuthService AuthService
+﻿@inject AuthService AuthService
+@inject NavigationManager Nav
 @inherits LayoutComponentBase
 
-<div class="page">
-    <NavMenu />
+@if (IsAllowedRoute())
+{
+    <div class="page">
+        <NavMenu />
 
-    <main>
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
-</div>
+        <main>
+            <article class="content px-4">
+                @Body
+            </article>
+        </main>
+    </div>
+}
 
 @code {
+    protected override void OnInitialized()
+    {
+        EnsureAccess();
+    }
+
     private bool _initialized;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -25,5 +33,37 @@
             // Tell Blazor to re-render now that auth state is loaded
             StateHasChanged();
         }
+    }
+
+    protected override void OnParametersSet()
+    {
+        EnsureAccess();
+    }
+
+    private void EnsureAccess()
+    {
+        var uri = Nav.Uri.ToLower();
+
+        bool isPublic =
+            uri.Contains("/login") ||
+            uri.Contains("/register") ||
+            uri.EndsWith("/");
+
+        if (!AuthService.IsLoggedIn && !isPublic)
+        {
+            Nav.NavigateTo("/login", true);
+        }
+    }
+
+    private bool IsAllowedRoute()
+    {
+        var uri = Nav.Uri.ToLower();
+
+        bool isPublic =
+            uri.Contains("/login") ||
+            uri.Contains("/register") ||
+            uri.EndsWith("/");
+
+        return AuthService.IsLoggedIn || isPublic;
     }
 }

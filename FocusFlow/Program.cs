@@ -2,22 +2,29 @@ using FocusFlow.Components;
 using FocusFlow.Data;
 using FocusFlow.Models;
 using FocusFlow.Services;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.JSInterop;
+
+DotNetEnv.Env.Load();
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Configuration.AddEnvironmentVariables();
+
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
 builder.Services.AddDbContextFactory<AppDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseNpgsql(builder.Configuration["ConnectionString"]));
 
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddLocalStorageServices();
 builder.Services.AddScoped<ProtectedLocalStorage>();
+builder.Services.AddAuthorizationCore();
+builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
+builder.Services.AddCascadingAuthenticationState();
 
 var app = builder.Build();
 
