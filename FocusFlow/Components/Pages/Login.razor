@@ -61,7 +61,7 @@
         bool success = await Auth.LoginAsync(username, password);
         if (success)
         {
-            Nav.NavigateTo("/");
+            Nav.NavigateTo("/", true);
         }
         else
         {
