@@ -22,9 +22,9 @@ builder.Services.AddDbContextFactory<AppDbContext>(options =>
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddLocalStorageServices();
 builder.Services.AddScoped<ProtectedLocalStorage>();
-builder.Services.AddAuthorizationCore();
-builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
-builder.Services.AddCascadingAuthenticationState();
+// builder.Services.AddAuthorizationCore();
+// builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
+// builder.Services.AddCascadingAuthenticationState();
 
 var app = builder.Build();
 
